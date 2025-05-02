@@ -3,21 +3,38 @@ import "./App.css";
 
 function App() {
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-const fetchData = async() => {
-  try {
-    const response = await fetch('http://localhost:3000/getUsers')
-    const jsonData = await response.json()
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch("http://localhost:3000/getUsers");
 
-    setData(jsonData)
-  }catch(err){
-    console.log(err);
-  }
-}
+      if (!response.ok) {
+        throw new Error("Error al obtener la data");
+      }
+
+      const jsonData = await response.json();
+      setData(jsonData);
+    } catch (err) {
+      setError(err as string);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    fetchData()
-  }, [])
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return <p>Loading........</p>;
+  }
+
+  if (error) {
+    return <p>Ups! hay un error: {error}</p>;
+  }
 
   return (
     <>
