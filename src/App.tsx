@@ -1,6 +1,5 @@
-import { use, useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
-import { Button } from "./components";
 
 function App() {
   const [data, setData] = useState([]);
@@ -22,7 +21,7 @@ const fetchData = async() => {
 
   return (
     <>
-      
+      <p>{JSON.stringify(data)}</p>
     </>
   );
 }
