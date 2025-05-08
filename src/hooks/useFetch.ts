@@ -15,9 +15,12 @@ export const useFetch = <T>(url: string): Params<T> => {
   const [error, setError] = useState<ErrorType>(null);
 
   useEffect(() => {
+    const controller = new AbortController();
+    setLoading(true);
+
     const fetchData = async () => {
       try {
-        const response = await fetch(url);
+        const response = await fetch(url, controller);
 
         if (!response.ok) {
           throw new Error("Error al obtener la data");
@@ -25,6 +28,7 @@ export const useFetch = <T>(url: string): Params<T> => {
 
         const jsonData: T = await response.json();
         setData(jsonData);
+        setError(null);
       } catch (err) {
         setError(err as Error);
       } finally {
@@ -33,6 +37,10 @@ export const useFetch = <T>(url: string): Params<T> => {
     };
 
     fetchData();
+
+    return () => {
+      controller.abort();
+    };
   }, [url]);
 
   return { data, loading, error };
