@@ -35,6 +35,7 @@ const CustomForm = () => {
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     console.log(data);
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
